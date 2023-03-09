@@ -1,12 +1,13 @@
-import customtkinter
-import tkinter
 import random
 import string
+
+import customtkinter
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("green")
 
 root = customtkinter.CTk()
+root.title("Genera password by Ionà e Circosta")
 root.geometry("600x600")
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
