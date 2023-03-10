@@ -1,116 +1,112 @@
-import customtkinter
 import random
 import string
 
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("green")
+import customtkinter
+
+customtkinter.set_appearance_mode("dark")  # tema
+customtkinter.set_default_color_theme("green")  # tema dei pulsanti e label
 
 root = customtkinter.CTk()
-root.geometry("500x600")
+root.resizable(width=True, height=False)
+root.title("Genera password by Ionà e Circosta")
+root.geometry("600x350")
+
+
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
 
+frame2 = customtkinter.CTkFrame(master=root)
+frame2.pack(pady=20, padx=60, fill="both", expand=True)
 
-def generaPassMin(lunghezza):
-    # Genera una stringa di caratteri minuscoli
-    letters = string.ascii_lowercase
-
-    # Crea una lista di caratteri casuali della lunghezza uguale alla variabie
-    password = ''.join(random.choice(letters) for i in range(lunghezza))
-    label = customtkinter.CTkLabel(master=frame, text=password)
-    label.pack()
-    print(password)
+def generaPassMin():
+    lettere = string.ascii_lowercase
+    ris(lettere)
 
 
-def generaPassMaiusc(lunghezza):
-    # Genera una stringa di caratteri masciucola
-    letters = string.ascii_uppercase
-
-    # Crea una lista di caratteri casuali della lunghezza uguale alla variabie
-    password = ''.join(random.choice(letters) for i in range(lunghezza))
-    print(password)
+def generaPassMaiusc():
+    lettere = string.ascii_uppercase
+    ris(lettere)
 
 
-def generaPassMinMaiusc(lunghezza):
+def generaPassMinMaiusc():
     lettere = string.ascii_letters
-
-    # Crea una lista di caratteri casuali della lunghezza uguale alla variabie
-    password = ''.join(random.choice(lettere) for i in range(lunghezza))
-    print(password)
+    ris(lettere)
 
 
-def generaPassSoloNumeri(lunghezza):
+def generaPassSoloNumeri():
     lettere = string.digits
-
-    # Crea una lista di caratteri casuali della lunghezza uguale alla variabie
-    password = ''.join(random.choice(lettere) for i in range(lunghezza))
-    print(password)
+    ris(lettere)
 
 
-def generaPassSoloSimboli(lunghezza):
+def generaPassSoloSimboli():
     lettere = string.punctuation
-
-    # Crea una lista di caratteri casuali della lunghezza uguale alla variabie
-    password = ''.join(random.choice(lettere) for i in range(lunghezza))
-    print(password)
+    ris(lettere)
 
 
-def generaAllPass(lunghezza):
+def generaAllPass():
     lettere = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
-
-    # Crea una lista di caratteri casuali della lunghezza uguale alla variabie
-    password = ''.join(random.choice(lettere) for i in range(lunghezza))
-    print(password)
+    ris(lettere)
 
 
-def generaAllPassSenzaSimboli(lunghezza):
+def generaAllPassSenzaSimboli():
     lettere = string.ascii_lowercase + string.ascii_uppercase + string.digits
+    ris(lettere)
 
-    # Crea una lista di caratteri casuali della lunghezza uguale alla variabie
-    password = ''.join(random.choice(lettere) for i in range(lunghezza))
-    print(password)
 
 def printProva():
     print(":)")
 
-"""
-generaPassMin(lunghezza)
-generaPassMaiusc(lunghezza)
-generaPassMinMaiusc(lunghezza)
-generaPassSoloNumeri(lunghezza)
-generaPassSoloSimboli(lunghezza)
-generaAllPass(lunghezza)
-generaAllPassSenzaSimboli(lunghezza)
-"""
-labelLunghezza = customtkinter.CTkLabel(master=frame, text="lunghezza password")
-labelLunghezza.pack()
 
-lunghezza = customtkinter.CTkEntry(master=frame)
-lunghezza.pack()
+# creazioni delle varie etichette
 
 label = customtkinter.CTkLabel(master=frame, text="Generatore di password")
-label.pack(pady=12, padx=10)
+label.grid(row=0, column=1, pady=12, padx=10)
 
-button = customtkinter.CTkButton(master=frame, text="Minuscole", command=generaPassMin)
-button.pack(pady=12, padx=10)
+labelLunghezza = customtkinter.CTkLabel(master=frame, text="lunghezza password")
+labelLunghezza.grid(row=1, column=0)
 
-button1 = customtkinter.CTkButton(master=frame, text="Maiuscole", command=printProva)
-button1.pack(pady=12, padx=10)
+lunghezza = customtkinter.CTkEntry(master=frame)
+lunghezza.grid(row=1, column=1)
 
-button2 = customtkinter.CTkButton(master=frame, text="Maiuscole e Minuscole", command=printProva)
-button2.pack(pady=12, padx=10)
+# creazioni vari bottoni
 
-button3 = customtkinter.CTkButton(master=frame, text="Numeri", command=printProva)
-button3.pack(pady=12, padx=10)
+button = customtkinter.CTkButton(master=frame2, text="Minuscole", command=generaPassMin)
+button.grid(row=2, column=0, pady=12, padx=10)
 
-button4 = customtkinter.CTkButton(master=frame, text="Simboli", command=printProva)
-button4.pack(pady=12, padx=10)
+button1 = customtkinter.CTkButton(master=frame2, text="Maiuscole", command=generaPassMaiusc)
+button1.grid(row=2, column=1, pady=12, padx=10)
 
-button5 = customtkinter.CTkButton(master=frame, text="No Simboli", command=printProva)
-button5.pack(pady=12, padx=10)
+button2 = customtkinter.CTkButton(master=frame2, text="Maiuscole e Minuscole", command=generaPassMinMaiusc)
+button2.grid(row=2, column=2, pady=12, padx=10)
 
-button6 = customtkinter.CTkButton(master=frame, text="Password Completa", command=printProva)
-button6.pack(pady=12, padx=10)
+button3 = customtkinter.CTkButton(master=frame2, text="Numeri", command=generaPassSoloNumeri)
+button3.grid(row=3, column=0, pady=12, padx=10)
 
+button4 = customtkinter.CTkButton(master=frame2, text="Simboli", command=generaPassSoloSimboli)
+button4.grid(row=3, column=1, pady=12, padx=10)
+
+button5 = customtkinter.CTkButton(master=frame2, text="No Simboli", command=generaAllPassSenzaSimboli)
+button5.grid(row=3, column=2, pady=12, padx=10)
+
+button6 = customtkinter.CTkButton(master=frame2, text="Password Completa", command=generaAllPass)
+button6.grid(row=4, column=1, pady=12, padx=10)
+
+risultato = customtkinter.CTkLabel(master=frame, text="")
+risultato.grid(row=1, column=2)
+
+
+def ris(lettere):
+    password = ''.join(random.choice(lettere) for i in range(int(lunghezza.get())))
+    risultato.configure(text=password)
+
+    def copiaRisultato():
+        root.clipboard_clear()
+        root.clipboard_append(str(risultato._text))
+        buttonCopia.configure(text="Copiato")
+
+    buttonCopia = customtkinter.CTkButton(master=frame2, text="Copia", command=copiaRisultato)
+    buttonCopia.grid(row=4, column=2, pady=12, padx=10)
+
+    buttonCopia.configure(fg_color="red", hover_color="#642424")
 
 root.mainloop()
