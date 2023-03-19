@@ -1,22 +1,22 @@
 import random
 import string
-
+from tkinter import *
 import customtkinter
 
 customtkinter.set_appearance_mode("dark")  # tema
 customtkinter.set_default_color_theme("green")  # tema dei pulsanti e label
 
 root = customtkinter.CTk()
-root.resizable(width=True, height=False)
+root.resizable(width=True, height=True)
 root.title("Genera password by Ionà e Circosta")
-root.geometry("600x350")
-
+root.geometry("600x550")
 
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
 
 frame2 = customtkinter.CTkFrame(master=root)
 frame2.pack(pady=20, padx=60, fill="both", expand=True)
+
 
 def generaPassMin():
     lettere = string.ascii_lowercase
@@ -62,12 +62,17 @@ def printProva():
 label = customtkinter.CTkLabel(master=frame, text="Generatore di password")
 label.grid(row=0, column=1, pady=12, padx=10)
 
-labelLunghezza = customtkinter.CTkLabel(master=frame, text="lunghezza password")
-labelLunghezza.grid(row=1, column=0)
+labelLunghezza = customtkinter.CTkLabel(master=frame, text="Lunghezza password: ")
+labelLunghezza.grid(row=1, column=0, padx=20)
 
 lunghezza = customtkinter.CTkEntry(master=frame)
-lunghezza.grid(row=1, column=1)
+lunghezza.grid(row=1, column=1, pady=10, padx=10)
 
+labelQuantity = customtkinter.CTkLabel(master=frame, text="Quantità password da generare: ")
+labelQuantity.grid(row=2, column=0, pady=10, padx=10)
+
+quantity = customtkinter.CTkEntry(master=frame)
+quantity.grid(row=2, column=1)
 # creazioni vari bottoni
 
 button = customtkinter.CTkButton(master=frame2, text="Minuscole", command=generaPassMin)
@@ -96,17 +101,67 @@ risultato.grid(row=1, column=2)
 
 
 def ris(lettere):
-    password = ''.join(random.choice(lettere) for i in range(int(lunghezza.get())))
-    risultato.configure(text=password)
+    password_list = []
+    while True:
+        password = ''.join(random.choice(lettere) for i in range(int(lunghezza.get())))
+        if password not in password_list:
+            password_list.append(password)
+            risultato.configure(text=password)
 
-    def copiaRisultato():
-        root.clipboard_clear()
-        root.clipboard_append(str(risultato._text))
-        buttonCopia.configure(text="Copiato")
+            def copiaRisultato():
+                root.clipboard_clear()
+                root.clipboard_append(str(risultato._text))
+                buttonCopia.configure(text="Copiato")
 
-    buttonCopia = customtkinter.CTkButton(master=frame2, text="Copia", command=copiaRisultato)
-    buttonCopia.grid(row=4, column=2, pady=12, padx=10)
+            buttonCopia = customtkinter.CTkButton(master=frame2, text="Copia", command=copiaRisultato)
+            buttonCopia.grid(row=4, column=2, pady=12, padx=10)
 
-    buttonCopia.configure(fg_color="red", hover_color="#642424")
+            buttonCopia.configure(fg_color="red", hover_color="#642424")
+
+            break
+
+
+def stampaPass(nuova_finestra, riga=1, Colonne=0):
+    rigaL = riga  # 1
+    rigaB = riga  # 1
+    colonnaL = Colonne  # 0
+    colonnaB = Colonne + 1  # 1
+    password = risultato
+    cont = 0  # per contare quante pw sono state generate
+    rigaMax = 11  # limite di righe per la finestra "pass generate" (aggiungere 1 al limite desiderato)
+
+    for i in range(int(quantity.get())):
+        cont += 1
+        LabelQ = customtkinter.CTkLabel(nuova_finestra, text=("Password " + str(cont)))
+        LabelQ.grid(row=rigaL, column=colonnaL, padx=20, pady=10)
+        rigaL += 1
+
+        if rigaL == rigaMax:
+            colonnaL += 2
+            rigaL = 1
+
+        buttonQ = customtkinter.CTkButton(nuova_finestra, text="eheh")
+        buttonQ.grid(row=rigaB, column=colonnaB, padx=2, pady=4)
+        rigaB += 1
+        if rigaB == rigaMax:
+            colonnaB += 2
+            rigaB = 1
+
+
+def apriFinestra():
+    # Crea la nuova finestra
+    nuovaFinestra = customtkinter.CTkToplevel(root)
+    nuovaFinestra.title("Password Generate")
+    nuovaFinestra.geometry("500x500")
+
+    labelMessaggio = customtkinter.CTkLabel(nuovaFinestra, text="Password Generate")
+    labelMessaggio.grid(row=0, column=0)
+    stampaPass(nuovaFinestra)
+
+
+# Crea il pulsante nella finestra principale
+pulsante = customtkinter.CTkButton(root, text="Vedi le tue password", command=apriFinestra)
+
+pulsante.pack()
 
 root.mainloop()
