@@ -1,6 +1,5 @@
 import random
 import string
-from tkinter import *
 import customtkinter
 
 customtkinter.set_appearance_mode("dark")  # tema
@@ -17,38 +16,47 @@ frame.pack(pady=20, padx=60, fill="both", expand=True)
 frame2 = customtkinter.CTkFrame(master=root)
 frame2.pack(pady=20, padx=60, fill="both", expand=True)
 
+lettere = "" # dichiaro variabile globale lettere che deve venire "richiamata" in ogni metodo scrivendo "global lettere" per poterla usare
+
 
 def generaPassMin():
+    global lettere
     lettere = string.ascii_lowercase
     ris(lettere)
 
 
 def generaPassMaiusc():
+    global lettere
     lettere = string.ascii_uppercase
     ris(lettere)
 
 
 def generaPassMinMaiusc():
+    global lettere
     lettere = string.ascii_letters
     ris(lettere)
 
 
 def generaPassSoloNumeri():
+    global lettere
     lettere = string.digits
     ris(lettere)
 
 
 def generaPassSoloSimboli():
+    global lettere
     lettere = string.punctuation
     ris(lettere)
 
 
 def generaAllPass():
+    global lettere
     lettere = string.ascii_lowercase + string.ascii_uppercase + string.digits + string.punctuation
     ris(lettere)
 
 
 def generaAllPassSenzaSimboli():
+    global lettere
     lettere = string.ascii_lowercase + string.ascii_uppercase + string.digits
     ris(lettere)
 
@@ -101,38 +109,33 @@ risultato.grid(row=1, column=2)
 
 
 def ris(lettere):
-    password_list = []
-    while True:
-        password = ''.join(random.choice(lettere) for i in range(int(lunghezza.get())))
-        if password not in password_list:
-            password_list.append(password)
-            risultato.configure(text=password)
+    risultato.configure(text=generaPassword(lettere)) # chiamata metodo diretto
 
-            def copiaRisultato():
-                root.clipboard_clear()
-                root.clipboard_append(str(risultato._text))
-                buttonCopia.configure(text="Copiato")
+    def copiaRisultato():
+        root.clipboard_clear()
+        root.clipboard_append(str(risultato.cget("text"))) # metodo cget per accedere al testo invece di accedere al parametro privato
+        buttonCopia.configure(text="Copiato")
 
-            buttonCopia = customtkinter.CTkButton(master=frame2, text="Copia", command=copiaRisultato)
-            buttonCopia.grid(row=4, column=2, pady=12, padx=10)
-
-            buttonCopia.configure(fg_color="red", hover_color="#642424")
-
-            break
+    buttonCopia = customtkinter.CTkButton(master=frame2, text="Copia", command=copiaRisultato)
+    buttonCopia.grid(row=4, column=2, pady=12, padx=10)
+    buttonCopia.configure(fg_color="red", hover_color="#642424")
 
 
-def stampaPass(nuova_finestra, riga=1, Colonne=0):
+def generaPassword(lettere): # estratto il vero metodo che genera la password e tolto l'inutile ciclo che non faceva un cazzo prob copiato da chatgpt senza guardare
+    return ''.join(random.choice(lettere) for _i in range(int(lunghezza.get())))
+
+
+def stampaPass(lettere, nuova_finestra, riga=1, Colonne=0):
     rigaL = riga  # 1
     rigaB = riga  # 1
     colonnaL = Colonne  # 0
     colonnaB = Colonne + 1  # 1
-    password = risultato
     cont = 0  # per contare quante pw sono state generate
     rigaMax = 11  # limite di righe per la finestra "pass generate" (aggiungere 1 al limite desiderato)
 
     for i in range(int(quantity.get())):
         cont += 1
-        LabelQ = customtkinter.CTkLabel(nuova_finestra, text=("Password " + str(cont)))
+        LabelQ = customtkinter.CTkLabel(nuova_finestra, text=f"Password {cont}: {generaPassword(lettere)}") # robba
         LabelQ.grid(row=rigaL, column=colonnaL, padx=20, pady=10)
         rigaL += 1
 
@@ -149,6 +152,7 @@ def stampaPass(nuova_finestra, riga=1, Colonne=0):
 
 
 def apriFinestra():
+    global lettere
     # Crea la nuova finestra
     nuovaFinestra = customtkinter.CTkToplevel(root)
     nuovaFinestra.title("Password Generate")
@@ -156,7 +160,7 @@ def apriFinestra():
 
     labelMessaggio = customtkinter.CTkLabel(nuovaFinestra, text="Password Generate")
     labelMessaggio.grid(row=0, column=0)
-    stampaPass(nuovaFinestra)
+    stampaPass(lettere, nuovaFinestra)
 
 
 # Crea il pulsante nella finestra principale
