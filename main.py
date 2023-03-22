@@ -2,22 +2,51 @@ import random
 import string
 import tkinter
 
-import customtkinter
+import customtkinter as ctk
 
-customtkinter.set_appearance_mode("dark")  # tema
-customtkinter.set_default_color_theme("green")  # tema dei pulsanti e label
+ctk.set_appearance_mode("dark")  # tema
+ctk.set_default_color_theme("green")  # tema dei pulsanti e label
 
-root = customtkinter.CTk()
+root = ctk.CTk()
 root.resizable(width=False, height=False)
 root.title("Genera password by Ionà e Circosta")
 root.geometry("650x550")
 
-frame = customtkinter.CTkFrame(master=root)
-frame.pack(pady=20, padx=60, fill="both", expand=True)
+# frame contentente gli input
+frameInput = ctk.CTkFrame(master=root)
+frameInput.pack(pady=20, padx=60, fill="both", expand=True)
 
-frame2 = customtkinter.CTkFrame(master=root)
-frame2.pack(pady=20, padx=60, fill="both", expand=True)
+# etichette input
+labelGeneratorePasswords = ctk.CTkLabel(master=frameInput, text="Generatore di password")
+labelGeneratorePasswords.grid(row=0, column=1, pady=12, padx=10)
 
+labelLunghezzaPasswords = ctk.CTkLabel(master=frameInput, text="Lunghezza password: ")
+labelLunghezzaPasswords.grid(row=1, column=0, padx=20)
+
+entryLunghezzaPasswords = ctk.CTkEntry(master=frameInput)
+entryLunghezzaPasswords.grid(row=1, column=1, pady=10, padx=10)
+
+labelNumeroPasswords = ctk.CTkLabel(master=frameInput, text="Quantità password da generare: ")
+labelNumeroPasswords.grid(row=2, column=0, pady=10, padx=10)
+
+entryNumeroPasswords = ctk.CTkEntry(master=frameInput)
+entryNumeroPasswords.grid(row=2, column=1)
+
+# frame contenete i vari bottoni
+frameBottoni = ctk.CTkFrame(master=root)
+frameBottoni.pack(pady=20, padx=60, fill="both", expand=True)
+
+# costanti, python non possiede costanti per convenzione le indichiama in CAPSLOCK
+ALFABETOMINUSCOLO = string.ascii_lowercase
+ALFABETOMAIUSCOLO = string.ascii_uppercase
+ALFABETO = string.ascii_letters
+
+CIFRE = string.digits
+SIMBOLI = string.punctuation
+
+ALFANUMERICO = ALFABETO + CIFRE
+COMPLETO = ALFABETO + CIFRE + SIMBOLI
+# attributi
 lettere = ""  # dichiaro variabile globale lettere che deve venire "richiamata" in ogni metodo scrivendo "global
 
 
@@ -63,70 +92,55 @@ def generaAllPassSenzaSimboli():
     ris(lettere)
 
 
+def ris(lettere):
+    risultato.configure(text=generaPassword(lettere))  # chiamata metodo diretto
+
+
 def printProva():
     print(":)")
 
 
-# creazioni delle varie etichette
-
-label = customtkinter.CTkLabel(master=frame, text="Generatore di password")
-label.grid(row=0, column=1, pady=12, padx=10)
-
-labelLunghezza = customtkinter.CTkLabel(master=frame, text="Lunghezza password: ")
-labelLunghezza.grid(row=1, column=0, padx=20)
-
-lunghezza = customtkinter.CTkEntry(master=frame)
-lunghezza.grid(row=1, column=1, pady=10, padx=10)
-
-labelQuantity = customtkinter.CTkLabel(master=frame, text="Quantità password da generare: ")
-labelQuantity.grid(row=2, column=0, pady=10, padx=10)
-
-quantity = customtkinter.CTkEntry(master=frame)
-quantity.grid(row=2, column=1)
 # creazioni vari bottoni
-
-button = customtkinter.CTkButton(master=frame2, text="Minuscole", command=generaPassMin)
+button = ctk.CTkButton(master=frameBottoni, text="Minuscole", command=generaPassMin)
 button.grid(row=2, column=0, pady=12, padx=10)
 
-button1 = customtkinter.CTkButton(master=frame2, text="Maiuscole", command=generaPassMaiusc)
+button1 = ctk.CTkButton(master=frameBottoni, text="Maiuscole", command=generaPassMaiusc)
 button1.grid(row=2, column=1, pady=12, padx=10)
 
-button2 = customtkinter.CTkButton(master=frame2, text="Maiuscole e Minuscole", command=generaPassMinMaiusc)
+button2 = ctk.CTkButton(master=frameBottoni, text="Maiuscole e Minuscole", command=generaPassMinMaiusc)
 button2.grid(row=2, column=2, pady=12, padx=10)
 
-button3 = customtkinter.CTkButton(master=frame2, text="Numeri", command=generaPassSoloNumeri)
+button3 = ctk.CTkButton(master=frameBottoni, text="Numeri", command=generaPassSoloNumeri)
 button3.grid(row=3, column=0, pady=12, padx=10)
 
-button4 = customtkinter.CTkButton(master=frame2, text="Simboli", command=generaPassSoloSimboli)
+button4 = ctk.CTkButton(master=frameBottoni, text="Simboli", command=generaPassSoloSimboli)
 button4.grid(row=3, column=1, pady=12, padx=10)
 
-button5 = customtkinter.CTkButton(master=frame2, text="No Simboli", command=generaAllPassSenzaSimboli)
+button5 = ctk.CTkButton(master=frameBottoni, text="No Simboli", command=generaAllPassSenzaSimboli)
 button5.grid(row=3, column=2, pady=12, padx=10)
 
-button6 = customtkinter.CTkButton(master=frame2, text="Password Completa", command=generaAllPass)
+button6 = ctk.CTkButton(master=frameBottoni, text="Password Completa", command=generaAllPass)
 button6.grid(row=4, column=1, pady=12, padx=10)
 
-risultato = customtkinter.CTkLabel(master=frame, text="")
+risultato = ctk.CTkLabel(master=frameInput, text="")
 risultato.grid(row=1, column=2)
 
 
-def ris(lettere):
-    risultato.configure(text=generaPassword(lettere))  # chiamata metodo diretto
+def copiaRisultato():
+    root.clipboard_clear()
+    root.clipboard_append(
+        str(risultato.cget("text")))  # metodo cget per accedere al testo invece di accedere al parametro privato
+    buttonCopia.configure(text="Copiato")
 
-    def copiaRisultato():
-        root.clipboard_clear()
-        root.clipboard_append(
-            str(risultato.cget("text")))  # metodo cget per accedere al testo invece di accedere al parametro privato
-        buttonCopia.configure(text="Copiato")
 
-    buttonCopia = customtkinter.CTkButton(master=frame2, text="Copia", command=copiaRisultato)
-    buttonCopia.grid(row=4, column=2, pady=12, padx=10)
-    buttonCopia.configure(fg_color="red", hover_color="#642424")
+buttonCopia = ctk.CTkButton(master=frameBottoni, text="Copia", command=copiaRisultato)
+buttonCopia.grid(row=4, column=2, pady=12, padx=10)
+buttonCopia.configure(fg_color="red", hover_color="#642424")
 
 
 def generaPassword(
         lettere):  # estratto il vero metodo che genera la password e tolto l'inutile ciclo che non faceva nulla
-    return ''.join(random.choice(lettere) for _i in range(int(lunghezza.get())))
+    return ''.join(random.choice(lettere) for _i in range(int(entryLunghezzaPasswords.get())))
 
 
 global password
@@ -146,12 +160,12 @@ def stampaPass(lettere, nuovaFinestra, riga=1, Colonne=0):
         root.clipboard_clear()
         root.clipboard_append(str(password))
 
-    for i in range(int(quantity.get())):
+    for i in range(int(entryNumeroPasswords.get())):
 
         password.append(generaPassword(lettere))
 
         cont += 1
-        LabelQ = customtkinter.CTkLabel(nuovaFinestra, text=f"Password {cont}: {password[cont - 1]}")
+        LabelQ = ctk.CTkLabel(nuovaFinestra, text=f"Password {cont}: {password[cont - 1]}")
         LabelQ.grid(row=rigaL, column=colonnaL, padx=20, pady=10)
         rigaL += 1
 
@@ -159,8 +173,8 @@ def stampaPass(lettere, nuovaFinestra, riga=1, Colonne=0):
             colonnaL += 2
             rigaL = 1
 
-        buttonQ = customtkinter.CTkButton(nuovaFinestra, text="Copia",
-                                          command=lambda testo=password[cont - 1]: copiaPassword(testo))
+        buttonQ = ctk.CTkButton(nuovaFinestra, text="Copia",
+                                command=lambda testo=password[cont - 1]: copiaPassword(testo))
         buttonQ.grid(row=rigaB, column=colonnaB, padx=2, pady=4)
         rigaB += 1
         if rigaB == rigaMax:
@@ -180,23 +194,22 @@ def copiaTutto():
 def apriFinestra():
     global lettere
     # Crea la nuova finestra
-    nuovaFinestra = customtkinter.CTkToplevel(root)
+    nuovaFinestra = ctk.CTkToplevel(root)
     nuovaFinestra.title("Password Generate")
     nuovaFinestra.geometry("750x550")
     nuovaFinestra.resizable(width=True, height=False)
 
-    labelMessaggio = customtkinter.CTkLabel(nuovaFinestra, text="Password Generate")
+    labelMessaggio = ctk.CTkLabel(nuovaFinestra, text="Password Generate")
     labelMessaggio.grid(row=0, column=0)
     stampaPass(lettere, nuovaFinestra)
 
-    buttonCopiaTutto = customtkinter.CTkButton(nuovaFinestra, text="Copia Tutto", command=copiaTutto)
+    buttonCopiaTutto = ctk.CTkButton(nuovaFinestra, text="Copia Tutto", command=copiaTutto)
     buttonCopiaTutto.grid(row=0, column=1, padx=4, pady=10)
     buttonCopiaTutto.configure(fg_color="red", hover_color="#642424")
 
 
 # Crea il pulsante nella finestra principale
-pulsante = customtkinter.CTkButton(root, text="Vedi le tue password", command=apriFinestra)
-
+pulsante = ctk.CTkButton(root, text="Vedi le tue password", command=apriFinestra)
 pulsante.pack()
 
 root.mainloop()
